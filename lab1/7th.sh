@@ -1,3 +1,3 @@
 #! bin/bash
-touch emails.lst
-grep -E -r -o -h '[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]+' '/etc/' | awk '{printf("%s, ", $1)}' > emails.lst
+email="[0-9A-Za-z_.]+@[0-9A-Za-z]+(\.[0-9A-Za-z]+)+"
+grep -E -r -h -s -o -w -a $email /etc | sort | uniq | awk '{printf("%s, ", $1)}' | sed -E "s/,\s*$//" > emails.lst
