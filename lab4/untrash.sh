@@ -25,9 +25,12 @@ do
     TMP=$(echo $Line | awk -F ":" '{print $1}' | awk -F "/" '{print $NF}')
     TMP=$(echo "$TMP" | rev | cut -c 2- | rev)
     
+
     if [[ -n $Line && "$TMP" = "$1" ]]
     then
+
         ArrayOfResultFirst[index]=$(echo $Line | awk -F ":" '{print $1}')
+        
         ArrayOfResultSecond[index]=$(echo $Line | awk -F ":" '{print $2}')
         echo "$index) ${ArrayOfResultFirst[index]}"
         
@@ -52,16 +55,17 @@ then
     ArrayOfResultFirst[Number]="$HOME"
 fi
 
-if [ -f "${ArrayOfResultFirst[Number]}/$1" ];
-then
-    echo -e "\nFile with the same name is located in the directory. You need to change the file name\n"
-    read NewName
-    ArrayOfResultFirst[Number]="${ArrayOfResultFirst[Number]}/$NewName"
-else
-    ArrayOfResultFirst[Number]="${ArrayOfResultFirst[Number]}/$1"
-fi
+NewName=$1
+while [ -f "${ArrayOfResultFirst[Number]}/$NewName" ]
+    do
+        echo -e "\nFile with the same name is located in the directory. You need to change the file name\n"
+	read NewName
+        
+    done
 
+ArrayOfResultFirst[Number]="${ArrayOfResultFirst[Number]}/$NewName"
 echo ${ArrayOfResultSecond[Number]}
+echo ${ArrayOfResultFirst[Number]}
 ln ${ArrayOfResultSecond[Number]} "${ArrayOfResultFirst[Number]}"
 rm ${ArrayOfResultSecond[Number]}
 echo "Success!"
